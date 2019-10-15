@@ -1,49 +1,50 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/use-static-query/
- */
-
 import React from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+import { StaticQuery, graphql } from "gatsby"
+//import { Head } from "../components/"
+import { Header } from "../components/header"
+import styled from "styled-components"
+import { GlobalStyle } from "../styles/GlobalStyle"
+import Platforms from "../components/platform"
+import Colors from "../components/colors"
+import Footer from "../components/footer"
 
-import Header from "./header"
-import "./layout.css"
+const Site = styled.div`
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 100%;
+`
 
-const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
+export const Layout = () => (
+  <StaticQuery
+    query={graphql`
+      query SiteTitleQuery {
+        site {
+          siteMetadata {
+            title
+            description
+          }
         }
       }
-    }
-  `)
+    `}
+    render={({ site }) => (
+      <Site>
+        {/* <Head metadata={site.siteMetadata} /> */}
 
-  return (
-    <>
-      <Header siteTitle={data.site.siteMetadata.title} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0px 1.0875rem 1.45rem`,
-          paddingTop: 0,
-        }}
-      >
-        <main>{children}</main>
-        <footer>
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
-        </footer>
-      </div>
-    </>
-  )
-}
+        <GlobalStyle />
+
+        <Header
+          title={site.siteMetadata.title}
+          description={site.siteMetadata.description}
+        />
+        <Platforms />
+        <Colors />
+        <Footer />
+      </Site>
+    )}
+  />
+)
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
